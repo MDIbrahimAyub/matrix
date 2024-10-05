@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matrix Calculator</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 450px;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 26px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        input[type="number"] {
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            margin: 5px 5px;
+            width: 60px;
+            text-align: center;
+            background-color: #f9f9f9;
+            color: #333;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #007bff;
+            background-color: #fff;
+        }
+
+        .matrix {
+            margin: 20px 0;
+        }
+
+        .buttons {
+            margin: 10px 0;
+        }
+
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            box-shadow: 0px 4px 10px rgba(0, 123, 255, 0.2);
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .result {
+            padding: 15px;
+            background-color: #f1f3f5;
+            border-radius: 12px;
+            margin-top: 20px;
+            color: #333;
+            font-size: 16px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .matrix input[type="number"]:read-only {
+            background-color: #e9ecef;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Matrix Calculator</h1>
+        <p>Enter matrix size</p>
+        <input type="number" id="matrixSize"/>
+        <div class="buttons">
+            <button onclick="generateMatrix()">Generate Matrix</button>
+        </div>
+
+        <div id="matrixSection" class="matrix" style="display:none;">
+            <div id="matrix1"></div>
+            <div id="matrix2"></div>
+            <button onclick="sumMatrices()" style="margin-top: 20px;">Sum Matrices</button>
+            <div id="resultMatrix" class="result" style="display:none;"></div>
+        </div>
+    </div>
+
+    <script>
+        let size;
+
+        function generateMatrix() {
+            size = parseInt(document.getElementById("matrixSize").value);
+            if (isNaN(size) || size < 2) {
+                alert('Please enter a valid number greater than 1');
+                return;
+            }
+
+            const matrix1 = document.getElementById("matrix1");
+            const matrix2 = document.getElementById("matrix2");
+            const resultMatrix = document.getElementById("resultMatrix");
+
+            matrix1.innerHTML = '<h3>Matrix 1</h3>';
+            matrix2.innerHTML = '<h3>Matrix 2</h3>';
+            resultMatrix.innerHTML = '';
+
+            for (let i = 0; i < size; i++) {
+                for (let j = 0; j < size; j++) {
+                    matrix1.innerHTML += `<input type="number" id="m1-${i}-${j}" value="0" />`;
+                    matrix2.innerHTML += `<input type="number" id="m2-${i}-${j}" value="0" />`;
+                }
+                matrix1.innerHTML += '<br>';
+                matrix2.innerHTML += '<br>';
+            }
+
+            document.getElementById("matrixSection").style.display = 'block';
+        }
+
+        function sumMatrices() {
+            let matrix1 = [];
+            let matrix2 = [];
+            let result = [];
+
+            for (let i = 0; i < size; i++) {
+                matrix1[i] = [];
+                matrix2[i] = [];
+                result[i] = [];
+
+                for (let j = 0; j < size; j++) {
+                    matrix1[i][j] = parseInt(document.getElementById(`m1-${i}-${j}`).value);
+                    matrix2[i][j] = parseInt(document.getElementById(`m2-${i}-${j}`).value);
+
+                    result[i][j] = matrix1[i][j] + matrix2[i][j];
+                }
+            }
+
+            displayResult(result);
+        }
+
+        function displayResult(result) {
+            const resultMatrix = document.getElementById("resultMatrix");
+            resultMatrix.style.display = 'block';
+            resultMatrix.innerHTML = '<h3>Result Matrix</h3>';
+
+            for (let i = 0; i < result.length; i++) {
+                for (let j = 0; j < result[i].length; j++) {
+                    resultMatrix.innerHTML += `<input type="number" value="${result[i][j]}" readonly/>`;
+                }
+                resultMatrix.innerHTML += '<br>';
+            }
+        }
+    </script>
+</body>
+</html>
